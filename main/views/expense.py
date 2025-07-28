@@ -1,4 +1,3 @@
-from django.views import View
 from django.shortcuts import render
 from main.views import *
 from main.models.expense import Expense
