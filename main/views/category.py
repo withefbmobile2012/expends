@@ -1,6 +1,9 @@
+from xml.dom import NotFoundErr
+
 from django.shortcuts import redirect, render, get_object_or_404
 
 import main.models as models
+from main import Category
 
 categories = [
 
@@ -25,4 +28,17 @@ def category_r(request):
     if request.POST:
         return category_read
 
-    return render(request, "categories.html", context={"created": category_cr})
+    return render(request, "categories.html", context={"c_list": category_read})
+
+def category_up(request, pk):
+    try:
+        category = models.Category.objects.get(pk=pk)
+    except models.Category.DoesNotExists:
+        return render (status=get_object_or_404(NotFoundErr))
+    if category.is_valid():
+        name = Category.name()
+        name = models.models.CharField(max_length=100)
+        category.save()
+        return render(request, "categories.html", {"c_up": category})
+    else:
+        ...
