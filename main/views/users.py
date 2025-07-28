@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib import messages
 
-import users.forms as forms
+import main.forms as forms
 
 
 def register_user(request):
