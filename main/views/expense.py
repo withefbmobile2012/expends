@@ -1,8 +1,7 @@
-from django.shortcuts import render, get_object_or_404
 from django.views import View
-from main.models.expense import ExpenseView
 from django.urls import path
 from main.views import *
+from main.models.expense import ExpenseView
 
 expense_urls = [
     path('expense/', ExpenseView.as_view(), name='expense'),
