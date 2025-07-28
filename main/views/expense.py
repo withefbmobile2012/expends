@@ -1,10 +1,10 @@
-from django.views import View
-from django.urls import path
+from django.shortcuts import render
 from main.views import *
-from main.models.expense import ExpenseView
+from main.models.expense import Expense
+from main.models import base
 
-expense_urls = [
-    path('expense/', ExpenseView.as_view(), name='expense'),
-    path('expense/<int:id>/', ExpenseView.as_view(), name='expense_detail'),
-    path('expense/<int:id>/edit/', ExpenseView.as_view(), name='expense_edit'),
-]
+
+class Expense(base.BaseModel):
+    def get(self, request):
+        expenses = Expense.objects.all()
+        return render(request, 'expense_list.html', {'expenses': expenses})
