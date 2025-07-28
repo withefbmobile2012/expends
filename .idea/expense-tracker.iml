@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
+<<<<<<< HEAD
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.venv" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.13" jdkType="Python SDK" />
+=======
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Python 3.13 (expence-tracker)" jdkType="Python SDK" />
+>>>>>>> 738e4a94d97a3f341a3d02e2505eba87fb8199d8
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
