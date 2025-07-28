@@ -1,4 +1,4 @@
-from models.expense import Expense
+from main.models.expense import Expense
 from django.urls import path
 
 path = [
