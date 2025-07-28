@@ -1,8 +1,8 @@
-from main.views.expense import Expense
 from django.urls import path
+from main.views.expense import ExpenseView 
 
-path = [
-    path('expense/', Expense.as_view(), name='expense'),
-    path('expense/<int:id>/', Expense.as_view(), name='expense_detail'),
-    path('expense/<int:id>/edit/', Expense.as_view(), name='expense_edit'),
+urlpatterns = [
+    path('expense/', ExpenseView.as_view(), name='expense'),
+    path('expense/<int:id>/', ExpenseView.as_view(), name='expense_detail'),
+    path('expense/<int:id>/edit/', ExpenseView.as_view(), name='expense_edit'),
 ]
