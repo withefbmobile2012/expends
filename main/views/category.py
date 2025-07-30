@@ -1,13 +1,14 @@
-from xml.dom import NotFoundErr
+from django.shortcuts import render, get_object_or_404
+from django.http import Http404
+from main import models
+from main.models import Category
+from rest_framework.exceptions import NotFound as NotFoundErr
 
-from django.shortcuts import redirect, render, get_object_or_404
+categories = []
 
-import main.models as models
-from main import Category
+def category_list(request):
+    return render(request, 'index.html')
 
-categories = [
-
-]
 
 
 def category_c(request):
