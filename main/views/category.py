@@ -1,6 +1,5 @@
 from django.http.response import Http404
 from django.shortcuts import  render
-import django.db.models as models
 
 import main.models as model
 
