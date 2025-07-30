@@ -13,7 +13,9 @@ def category_create(request):
             name=name,
         )
 
-    return render(request, "categories.html", context={"c_create": category_c})
+    return render(request, "blank.html", context={"c_create": category_c})
+
+
 
 def category_read(request):
     category_r = model.Category.objects.all()
@@ -21,7 +23,7 @@ def category_read(request):
     if request.POST:
         return category_r
 
-    return render(request, "categories.html", context={"c_read": category_r})
+    return render(request, "blank.html", context={"c_read": category_r})
 
 def category_update(request, pk):
     try:
@@ -37,7 +39,7 @@ def category_update(request, pk):
     except model.Category.objects.DoesNotExists as e:
         return Http404(e)
 
-    return render(request, "categories.html", {"c_update": category_u})
+    return render(request, "blank.html", {"c_update": category_u})
 
 
 def category_delete(request, pk):
@@ -47,4 +49,4 @@ def category_delete(request, pk):
         return Http404(d)
     if pk.is_valid():
         category_d.delete()
-    return render(request, "categories.html", {"c_delete": category_d})
+    return render(request, "blank.html", {"c_delete": category_d})
