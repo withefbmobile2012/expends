@@ -19,8 +19,3 @@ class CategoryAdmin(admin.ModelAdmin):
 class ExpenseAdmin(admin.ModelAdmin):
     list_display = ("id", "amount", "added_at", "description", "date")
     list_display_links = ("id", "description")
-
-
-@admin.register(models.User)
-class UserAdmin(admin.ModelAdmin):
-    ...
