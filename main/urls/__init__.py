@@ -5,6 +5,7 @@ from main.views.expense import Expense
 from django.urls import path, include
 from main.views.home import home
 from main.views.users import register_user, login_user, logout_user, profile
+from django.contrib import admin
 
 __all__ = [
     'ExpenseView',
@@ -14,12 +15,11 @@ __all__ = [
 
 
 urlpatterns = [
-    path('expense/', include(expense_urls)),
-    path('', home, name='home'),
+    path('', home, name='home'),  # home page
     path('register/', register_user, name='register_user'),
     path('login/', login_user, name='login_user'),
     path('logout/', logout_user, name='logout_user'),
     path('profile/', profile, name='profile'),
-
     path('category/', include('main.urls.category')),
+    path('expense/', include('main.urls.expense')),
 ]

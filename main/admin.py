@@ -15,12 +15,8 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ("id", "name")
 
 
-@admin.register(models.Expense)
-class ExpenseAdmin(admin.ModelAdmin):
-    list_display = ("id", "amount", "added_at", "description", "date")
-    list_display_links = ("id", "description")
+class ExpenseAdmin(models.Expense):
+    list_display = ('description', 'amount_spent', 'salary', 'remaining', 'category', 'date')
+    list_filter = ('category', 'date')
+    search_fields = ('description', 'tags')
 
-
-@admin.register(models.User)
-class UserAdmin(admin.ModelAdmin):
-    ...
