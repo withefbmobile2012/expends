@@ -383,16 +383,16 @@
                                 
                                 <div class="card shadow mb-4">
                                     <div class="card-header py-3">
-                                        <h4 class="m-0 font-weight-bold text-primary" href="/">Add Expense</h4>
+                                        <h4 class="m-0 font-weight-bold text-primary">Add Expense</h4>
                                     </div>
                                     <div class="card-body">
-                                        <form method="POST" href="/">
+                                        <form method="POST">
                                             {% csrf_token %}
                                             <div class="form-group">
                                                 {{ form.as_p }}
                                             </div>
                                             <button type="submit" class="btn btn-primary btn-block shadow-sm">
-                                                <i class="fas fa-plus-circle" href="/"></i> Add Expense
+                                                <i class="fas fa-plus-circle"></i> Add Expense
                                             </button>
                                         </form>
                                     </div>
