@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
+import main.forms
 import main.models as model
 
 
@@ -30,8 +31,20 @@ def categories_list(request):
     return render(request, "categories.html", context)
 
 def categories_update(request, pk):
-    ...
-
+    category_update = get_object_or_404(model.Category, pk=pk)
+    if request.POST:
+        form = main.forms.CategoryForm
+        if form.is_valid():
+            form.save()
+            return redirect("/category/list")
+        form = main.forms.CategoryForm(instance=category_update)
+        context = {
+            "form": form,
+            "title": "Category Update"
+        }
+        return render(request, "crud_form.html", context)
+    else:
+        return redirect("/")
 
 def categories_delete(pk):
     category_delete = get_object_or_404(model.Category, pk=pk)
