@@ -12,7 +12,7 @@ def expense_view(request):
         form = ExpenseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('expense') 
+            return redirect('/expense') 
     else:
         form = ExpenseForm()
 
