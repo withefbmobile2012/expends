@@ -1,5 +1,5 @@
 from django import forms
-from .models import Expense, Category
+from .models import Expense
 
 
 class ExpenseForm(forms.ModelForm):
@@ -11,10 +11,3 @@ class ExpenseForm(forms.ModelForm):
         }
 
 
-class CategoryForm(forms.ModelForm):
-    class Meta:
-        model = Category
-        fields = ['name']
-        widgets = {
-            'name': forms.TextInput(attrs={'placeholder': 'Category Name'}),
-        }
