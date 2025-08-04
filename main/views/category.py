@@ -1,5 +1,4 @@
-from django.http.response import Http404
-from django.shortcuts import  render
+from django.shortcuts import render, get_object_or_404, redirect
 
 import main.models as model
 
@@ -13,40 +12,28 @@ def category_create(request):
             name=name,
         )
 
-    return render(request, "blank.html", context={"c_create": category_c})
+    return render(request, "categories.html", context={"c_create": category_c})
 
 
+def categories_detail(request, pk):
+    category_detail = get_object_or_404(model.Category, pk=pk)
+    context = {
+        "c_detail": category_detail
+    }
+    return render(request, "categories.html", context)
 
-def category_read(request):
-    category_r = model.Category.objects.all()
+def categories_list(request):
+    category_list = model.Category.objects.all()
+    context = {
+        "c_list": category_list
+    }
+    return render(request, "categories.html", context)
 
-    if request.POST:
-        return category_r
-
-    return render(request, "blank.html", context={"c_read": category_r})
-
-def category_update(request, pk):
-    try:
-        category_u = model.Category.objects.get(pk=pk)
-        if request.POST:
-            name = request.POST.get("name")
-            model.Category.objects.delete(
-                name=name,
-            )
-            model.Category.objects.create(
-                name=name,
-            )
-    except model.Category.objects.DoesNotExists as e:
-        return Http404(e)
-
-    return render(request, "blank.html", {"c_update": category_u})
+def categories_update(request, pk):
+    ...
 
 
-def category_delete(request, pk):
-    try:
-        category_d = model.Category.objects.get(pk=pk)
-    except model.Category.objects.DoesNotExists as d:
-        return Http404(d)
-    if pk.is_valid():
-        category_d.delete()
-    return render(request, "blank.html", {"c_delete": category_d})
+def categories_delete(pk):
+    category_delete = get_object_or_404(model.Category, pk=pk)
+    category_delete.delete()
+    return redirect("/")
