@@ -16,7 +16,7 @@ class ExpenseView(View):
         form = ExpenseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('expense') 
+            return redirect('/expense') 
         
         expenses = Expense.objects.all()
         return render(request, 'expense.html', {'form': form, 'expenses': expenses})
