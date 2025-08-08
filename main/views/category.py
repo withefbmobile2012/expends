@@ -1,52 +1,68 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
-import main.forms
+import main.forms as forms
 import main.models as model
 
 
-def category_create(request):
-    category_c = model.Category.objects.all()
-
-    if request.POST:
-        name = request.POST.get("name")
-        model.Category.objects.create(
-            name=name,
-        )
-
-    return render(request, "categories.html", context={"c_create": category_c})
-
-
 def categories_detail(request, pk):
-    category_detail = get_object_or_404(model.Category, pk=pk)
-    context = {
-        "c_detail": category_detail
-    }
-    return render(request, "categories.html", context)
+    if request.user.is_authenticated:
+        category_detail = get_object_or_404(model.Category, pk=pk)
+        context = {
+            "category_detail": category_detail
+        }
+    else:
+        return redirect("/")
+    return render(request, "category_detail.html", context)
+
 
 def categories_list(request):
-    category_list = model.Category.objects.all()
-    context = {
-        "c_list": category_list
-    }
+    if request.user.is_authenticated:
+        category_list = model.Category.objects.all()
+        context = {
+            "category_list": category_list
+        }
+    else:
+        return redirect("/")
     return render(request, "categories.html", context)
 
-def categories_update(request, pk):
-    category_update = get_object_or_404(model.Category, pk=pk)
-    if request.POST:
-        form = main.forms.CategoryForm
-        if form.is_valid():
-            form.save()
-            return redirect("/category/list")
-        form = main.forms.CategoryForm(instance=category_update)
+
+def category_create(request):
+    if request.user.is_authenticated:
+        if request.POST:
+            form = forms.CategoryForm
+            if form.is_valid():
+                form.save()
+                return redirect("/category/list")
+        form = forms.CategoryForm()
         context = {
-            "form": form,
-            "title": "Category Update",
+            "form": form
         }
-        return render(request, "crud_form.html", context)
+    else:
+        return redirect("/")
+    return render(request, "category.html", context)
+
+
+def category_update(request, pk):
+    obj = get_object_or_404(model.Category, pk=pk)
+    if request.user.is_authenticated:
+        if request.POST:
+            form = forms.CategoryForm(request.POST, instance=obj)
+            if form.is_valid():
+                form.save()
+                return redirect("/category/list")
+        form = forms.CategoryForm(instance=obj)
+        context = {
+            "form": form
+        }
+        return render(request, "categories.html", context)
     else:
         return redirect("/")
 
-def categories_delete(pk):
-    category_delete = get_object_or_404(model.Category, pk=pk)
-    category_delete.delete()
-    return redirect("/")
+
+def category_delete(request, pk):
+    obj = get_object_or_404(model.Category, pk=pk)
+    if request.user.is_authenticated:
+        obj.delete()
+        return redirect("/category/list")
+    else:
+        return redirect("/")
