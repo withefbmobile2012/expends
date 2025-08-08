@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="news mt-3">
+    {% for i in c_list %}
+    <h2>
+        <a
+                class="text-decoration-none text-dark"
+                href="/news-detail/{{ i.id }}">
+            {{ i.name }}
+        </a>
+    </h2>
+    {% endfor %}
+</div>
+{% endblock %}
