@@ -425,7 +425,7 @@
                                     
                                     <div class="add-expense-container">
                                         <h3>Add Expense</h3>
-                                        <form method="post" action="{% url 'expense_list' %}">
+                                        <form method="post" action="/expense/">
                                             {% csrf_token %}
                                             {{ form.as_p }}
                                             <button type="submit">Add Expense</button>
