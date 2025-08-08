@@ -1,9 +1,9 @@
 from django.db import models
 
-import main.models as model
+from main.models.base import *
 
 
-class Dashboard(model.BaseModel):
+class Dashboard(BaseModel):
     filter_name = models.CharField(max_length=1000)
 
     def __str__(self):

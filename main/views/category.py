@@ -40,7 +40,7 @@ def categories_update(request, pk):
         form = main.forms.CategoryForm(instance=category_update)
         context = {
             "form": form,
-            "title": "Category Update"
+            "title": "Category Update",
         }
         return render(request, "crud_form.html", context)
     else:

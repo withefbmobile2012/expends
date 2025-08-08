@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-
+from django.db.models import Sum
 import main.forms
-import main.models as model
+import main.models as models
 
 
 def filtering_daily(request):
-    daily = main.models.Expense.objects.filter(user=request.user, date=timezone.now().date())
+    daily = models.Expense.objects.filter(user=request.user, date=timezone.now().date())
     context = {
         "daily_filter": daily
     }
@@ -14,7 +14,7 @@ def filtering_daily(request):
 
 
 def filtering_weekly(request):
-    weekly = main.models.Expense.objects.filter(user=request.user, date=timezone.now().weekday())
+    weekly = models.Expense.objects.filter(user=request.user, date=timezone.now().weekday())
     context = {
         "weekly_filter": weekly
     }
@@ -22,13 +22,16 @@ def filtering_weekly(request):
 
 
 def filtering_monthly(request):
-    monthly = main.models.Expense.objects.filter(user=request.user, date=timezone.now().month)
+    monthly = models.Expense.objects.filter(user=request.user, date=timezone.now().month)
     context = {
         "monthly_filter": monthly
     }
     return render(request, "categories.html", context)
 
 
-def filtering_by_categories(request, pk):
-    category = model.Category.objects.get(pk=pk)
-    filtering = main.models.Expense.objects.filter(user=request.user).values('category__name').annotate(total=Sum('amount'))
+def filtering_by_categories(request):
+    category_filter = models.Expense.objects.filter(users=request.user).values('category__name').annote(total=Sum('amount'))
+    context = {
+        "category_filter": category_filter
+    }
+    return render(request, "category.html", context)
