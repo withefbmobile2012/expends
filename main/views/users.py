@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from main import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 def login_user(request):
     if request.POST:
-        form = forms.LoginUserForm(request.POST)
+        form = AuthenticationForm(request.POST)
         if form.is_valid():
             user = form.get_user()
             if user is not None:
@@ -12,8 +13,8 @@ def login_user(request):
                 return redirect('/')
             else:
                 messages.error(request, 'Invalid credentials')
-    form = forms.LoginUserForm()
-    return render(request, "auth/login.html", {"form": form})
+    form = AuthenticationForm()
+    return render(request, "auth/register.html", {"form": form})
 
 
 def logout_user(request):
