@@ -1,5 +1,5 @@
 from django import forms
-from .models import Expense
+from .models import Expense, Category
 
 
 class ExpenseForm(forms.ModelForm):
