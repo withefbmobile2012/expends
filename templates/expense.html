@@ -423,15 +423,37 @@
                                     }
                                     </style>
                                     
-                                    <div class="add-expense-container">
-                                        <h3>Add Expense</h3>
-                                        <form method="post" action="/expense/">
-                                            {% csrf_token %}
-                                            {{ form.as_p }}
-                                            <button type="submit">Add Expense</button>
-                                        </form>
+                                    <form method="post" action="{% url 'expense_list' %}">
+                                        {% csrf_token %}
+                                    
+                                        {% if not salary_set %}
+                                            <div class="form-group">
+                                                <label for="salary">Enter Your Salary</label>
+                                                <input type="number" name="salary" class="form-control" required>
+                                            </div>
+                                        {% else %}
+                                            <p><strong>Remaining Salary:</strong> ${{ total_salary }}</p>
+                                        {% endif %}
+                                    
+                                        {{ form.as_p }}
+                                    
+                                        <button type="submit" class="btn btn-primary">Add Expense</button>
+                                    
+                                        {% if form_errors %}
+                                            <div class="alert alert-danger mt-2">
+                                                {% for field, errors in form_errors.items %}
+                                                    <strong>{{ field|title }}:</strong> {{ errors|join:", " }}<br>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    
+                                        {% if salary_error %}
+                                            <div class="alert alert-danger mt-2">
+                                                {{ salary_error }}
+                                            </div>
+                                        {% endif %}
+                                    </form>
                                     </div>
-
                                 <hr>
 
                                 <table class="table table-bordered table-striped">

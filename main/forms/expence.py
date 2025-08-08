@@ -1,13 +1,12 @@
 from django import forms
-from main.models import Expense, Category
+from main.models import Expense
+
 
 
 class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
-        fields = ['salary', 'amount_spent', 'description', 'date']
+        exclude = ['salary']  
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
-
-
