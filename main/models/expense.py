@@ -32,9 +32,3 @@ class UserSalary(models.Model):
     def __str__(self):
         return f"Total Salary: {self.total_salary}"
     
-
-class UserSalary(models.Model):
-    total_salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-
-    def __str__(self):
-        return f"Total Salary: {self.total_salary}"
