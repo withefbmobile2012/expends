@@ -1,18 +1,27 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from main import forms
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 
 def login_user(request):
     if request.POST:
-        form = AuthenticationForm(request.POST)
+        form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            user = form.get_user()
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            print(username, password)
+
+            user = authenticate(username=username, password=password)
             if user is not None:
+                print(user)
+                login(request, user)
                 messages.success(request, 'Logged in successfully')
-                return redirect('/')
+                return redirect('/home')
             else:
                 messages.error(request, 'Invalid credentials')
+        messages.error(request, f'{form.errors}')
+        print(form.error_messages)
     form = AuthenticationForm()
     return render(request, "auth/register.html", {"form": form})
 
