@@ -43,8 +43,8 @@ def category_create(request):
 
 
 def category_update(request, pk):
-    obj = get_object_or_404(model.Category, pk=pk)
     if request.user.is_authenticated:
+        obj = get_object_or_404(model.Category, pk=pk)
         if request.POST:
             form = forms.CategoryForm(request.POST, instance=obj)
             if form.is_valid():
@@ -60,8 +60,8 @@ def category_update(request, pk):
 
 
 def category_delete(request, pk):
-    obj = get_object_or_404(model.Category, pk=pk)
     if request.user.is_authenticated:
+        obj = get_object_or_404(model.Category, pk=pk)
         obj.delete()
         return redirect("/category/list")
     else:
