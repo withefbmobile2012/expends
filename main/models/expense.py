@@ -2,20 +2,24 @@ from django.db import models
 from django.utils import timezone
 
 
-class Expense(models.Model):
-    CATEGORY_CHOICES = [
-        ('FOOD', 'Food'),
-        ('BILLS', 'Bills'),
-        ('ENTERTAINMENT', 'Entertainment'),
-        ('TRAVEL', 'Travel'),
-        ('HEALTH', 'Health'),
-        ('OTHER', 'Other'),
-    ]
 
-    salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-    amount_spent = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-    description = models.CharField(max_length=200, default="No description")
-    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='OTHER')
+class UserSalary(models.Model):
+    total_salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+
+    def remaining_salary(self):
+        spent = sum(exp.amount_spent or 0 for exp in self.expenses.all())
+        return self.total_salary - spent
+
+    def __str__(self):
+        return f"Total Salary: {self.total_salary}"
+    
+
+
+class Expense(models.Model):
+    salary = models.ForeignKey(UserSalary, on_delete=models.CASCADE, related_name='expenses')
+    amount_spent = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    description = models.CharField(max_length=200, blank=True, null=True)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, related_name='expenses', blank=True)
     date = models.DateField(default=timezone.now)
 
     def __str__(self):
@@ -23,18 +27,4 @@ class Expense(models.Model):
 
     @property
     def remaining_salary_after_this(self):
-        return self.salary - self.amount_spent
-
-
-class UserSalary(models.Model):
-    total_salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-
-    def __str__(self):
-        return f"Total Salary: {self.total_salary}"
-    
-
-class UserSalary(models.Model):
-    total_salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
-
-    def __str__(self):
-        return f"Total Salary: {self.total_salary}"
+        return self.salary.total_salary - self.amount_spent
