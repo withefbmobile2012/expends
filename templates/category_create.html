@@ -1,17 +1,19 @@
-{% extends categories.html %}
+{% extends "base.html" %}
+{% block content %}
 {% load static %}
 <html>
   <body>
     <div class="container">
         <div class="section">
-            <h2>Category Update</h2>
+            <h2>Category Create</h2>
             <div class="form-group"><form class="form-floating">
             <input type="text" class="form-control" id="floatingInputValue" placeholder="name" value="">
             <label for="floatingInputValue">Enter name for new Category</label>
             </form>
                 <input type="text">
             </div>
-            <button style="--bs-success">Submit</button>
+            <button><a href="/category">Submit</a></button>
     </div>
    </body>
 </html>
+{% endblock %}
