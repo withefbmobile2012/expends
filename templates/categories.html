@@ -1,21 +1,19 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends "category_base.html" %}
 {% block content %}
+{% load static %}
 
-
-{% block profile %}
 <h4>Category list</h4>
 <table class="table">
     <thead>
     <tr>
-        <th scope="col">#</th>
+        <th scope="col">Id</th>
         <th scope="col">Name</th>
         <th scope="col">Update</th>
         <th>Delete</th>
     </tr>
     </thead>
     <tbody>
-    {% for i in c_list %}
+    {% for i in objects_list %}
     <tr>
         <th scope="row">{{ i.id }}</th>
         <td>{{ i.name }}</td>
@@ -39,8 +37,7 @@
             </a>
         </td>
     </tr>
-
-    <!-- Modal -->
+<!--  Modal  -->
     <div class="modal fade" id="exampleModal_{{ i.id }}" tabindex="-1" aria-labelledby="exampleModalLabel_{{ i.id }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -52,6 +49,7 @@
                     <ul>
                         <li>Id: {{ i.id }}</li>
                         <li>Name: {{ i.name }}</li>
+                        <li>Order Number: {{ i.order_num }}-chi</li>
                     </ul>
                     <p class="text-warning">O'chib ketgan object qayta tiklash imkoni yoq</p>
                 </div>

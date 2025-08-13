@@ -2,10 +2,8 @@ from datetime import timedelta
 
 from django.shortcuts import render
 from django.utils import timezone
-from django.db.models import Sum
+from django.db.models import Sum, Count
 import main.models as models
-from main.models import Category
-from main.views.category import categories_detail
 
 
 def dashboard(request):
@@ -16,13 +14,13 @@ def dashboard(request):
     weekly = models.Expense.objects.filter(user=request.user, date__gte=end_of_week)
     monthly = models.Expense.objects.filter(user=request.user, date__month=timezone.now().month)
     by_categories = models.Expense.objects.filter(user=request.user).values('category__name').annotate(total=Sum('amount'))
-    # most_used = models.Expense.objects.filter(user=request.user).values('category__used_times')
+    most_used = models.Expense.objects.filter(user=request.user).values('category__name').annotate(total=Count('id')).order_by('-total')
     context = {
         "daily": daily,
         "weekly": weekly,
         "monthly": monthly,
         "by_categories": by_categories,
-        # "most_used": most_used,
+        "most_used": most_used,
     }
     return render(request, "charts.html", context)
 

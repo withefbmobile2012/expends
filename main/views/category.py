@@ -12,7 +12,7 @@ def categories_detail(request, pk):
         }
     else:
         return redirect("/")
-    return render(request, "category_detail.html", context)
+    return render(request, "categories.html", context)
 
 
 def categories_list(request):
@@ -39,7 +39,7 @@ def category_create(request):
         }
     else:
         return redirect("/")
-    return render(request, "category.html", context)
+    return render(request, "category_create.html", context)
 
 
 def category_update(request, pk):
@@ -54,7 +54,7 @@ def category_update(request, pk):
         context = {
             "form": form
         }
-        return render(request, "categories.html", context)
+        return render(request, "category_update.html", context)
     else:
         return redirect("/")
 
