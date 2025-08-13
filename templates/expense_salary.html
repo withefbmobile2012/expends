@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">💰 Manage Salaries</h2>
+
+    <!-- Salary Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Add New Salary</h5>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">➕ Add Salary</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Salary List -->
+    {% if salaries %}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Current Salaries</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Total Salary</th>
+                        <th>Remaining Salary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for salary in salaries %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>${{ salary.total_salary }}</td>
+                        <td>
+                            ${{ salary.total_salary|floatformat:2 }}
+                        </td>
+                        <td>
+                            <!-- You can add edit/delete buttons later -->
+                            <a href="#" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+        <p>No salaries found. Add one above 👆</p>
+    {% endif %}
+</div>
+{% endblock %}
