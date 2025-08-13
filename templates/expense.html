@@ -376,14 +376,14 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Expense Example</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">NiggaChad</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 
                                 
                                 <style>
-                                    /* Restore old Add Expense style */
+
                                     .add-expense-container {
                                         background: #f9f9f9;
                                         padding: 15px;
@@ -423,118 +423,92 @@
                                     }
                                     </style>
                                     
-                                    <form method="post" action="{% url 'expense_list' %}">
+                                    <form method="post" action="{% url 'expense_list' %}" class="mb-4">
                                         {% csrf_token %}
                                     
-                                        {% if not salary_set %}
-                                            <div class="form-group">
-                                                <label for="salary">Enter Your Salary</label>
-                                                <input type="number" name="salary" class="form-control" required>
-                                            </div>
-                                        {% else %}
-                                            <p><strong>Remaining Salary:</strong> ${{ total_salary }}</p>
-                                        {% endif %}
+                                        <div class="card shadow-sm border-0">
+                                            <div class="card-body">
+                                                
+                                                <!-- Salary Selection
+                                                <div class="form-group mb-3">
+                                                    <label for="id_salary" class="fw-bold">Select Salary</label>
+                                                    {{ form.salary }}
+                                                </div> -->
                                     
-                                        {{ form.as_p }}
-                                    
-                                        <button type="submit" class="btn btn-primary">Add Expense</button>
-                                    
-                                        {% if form_errors %}
-                                            <div class="alert alert-danger mt-2">
-                                                {% for field, errors in form_errors.items %}
-                                                    <strong>{{ field|title }}:</strong> {{ errors|join:", " }}<br>
-                                                {% endfor %}
-                                            </div>
-                                        {% endif %}
-                                    
-                                        {% if salary_error %}
-                                            <div class="alert alert-danger mt-2">
-                                                {{ salary_error }}
-                                            </div>
-                                        {% endif %}
-                                    </form>
-                                    </div>
-                                <hr>
-
-                                <table class="table table-bordered table-striped">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Description</th>
-                                            <th>Date</th>
-                                            <th>Amount Spent</th>
-                                            <th>Remaining</th>
-                                            <th>Salary</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for i in expense %}
-                                        <tr>
-                                            <td>{{ forloop.counter }}</td>
-                                            <td>{{ i.description }}</td>
-                                            <td>{{ i.date }}</td>
-                                            <td>${{ i.amount_spent }}</td>
-                                            <td>${{ i.remaining }}</td>
-                                            <td>${{ i.salary }}</td>
-                                            <td>
-                                                <!-- Edit button triggers modal -->
-                                                <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal-{{ i.pk }}">
-                                                    Edit
-                                                </button>
-                                
-                                                <!-- Delete form without confirmation -->
-                                                <form method="post" action="{% url 'expense_delete' i.pk %}"  style="display:inline;">
-                                                    {% csrf_token %}
-                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                
-                                        <!-- Bootstrap modal for editing -->
-                                        <div class="modal fade" id="editModal-{{ i.pk }}" tabindex="-1" role="dialog">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Edit Expense</h5>
-                                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                            </div>
-
-                                                            <form method="post" action="{% url 'expense_edit' i.pk %}" >
-                                                                {% csrf_token %}
-                                                                <div class="modal-body">
-                                                                    <div class="form-group">
-                                                                        <label>Description</label>
-                                                                        <input type="text" name="description" value="{{ i.description }}" class="form-control" required>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Amount Spent</label>
-                                                                        <input type="number" name="amount_spent" value="{{ i.amount_spent }}" class="form-control" required>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Date</label>
-                                                                        <input type="date" name="date" value="{{ i.date|date:'Y-m-d' }}" class="form-control" required>
-                                                                    </div>
-                                                                    <div class="form-group">
-                                                                        <label>Salary</label>
-                                                                        <input type="number" name="salary" value="{{ i.salary }}" class="form-control" required>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                                </div>
-                                                            </form>
+                                                <div class="mb-3">
+                                                    {{ form.as_p }}
                                                 </div>
+                                    
+                                                <div class="text-end">
+                                                    <button type="submit" class="btn btn-success px-4">
+                                                        ➕ Add Expense
+                                                    </button>
+                                                </div>
+                                    
+                                                {% if form_errors %}
+                                                    <div class="alert alert-danger mt-3">
+                                                        {% for field, errors in form_errors.items %}
+                                                            <strong>{{ field|title }}:</strong> {{ errors|join:", " }}<br>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% endif %}
+                                    
+                                                {% if salary_error %}
+                                                    <div class="alert alert-danger mt-3">
+                                                        {{ salary_error }}
+                                                    </div>
+                                                {% endif %}
                                             </div>
                                         </div>
-                                        {% empty %}
-                                        <tr>
-                                            <td colspan="7">No expenses found.</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+                                    </form>
+                                    
+                                    <hr>
+                                    
+                                    <div class="card shadow-sm border-0">
+                                        <div class="card-header bg-dark text-white">
+                                            <h5 class="mb-0">📊 Expense History</h5>
+                                        </div>
+                                        <div class="card-body p-0">
+                                            <table class="table table-hover mb-0">
+                                                <thead class="table-dark">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Description</th>
+                                                        <th>Date</th>
+                                                        <th>Amount Spent</th>
+                                                        <th>Remaining</th>
+                                                        <th>Salary</th>
+                                                        <th class="text-center">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for i in expense %}
+                                                        <tr>
+                                                            <td>{{ forloop.counter }}</td>
+                                                            <td>{{ i.description|default:"---" }}</td>
+                                                            <td>{{ i.date }}</td>
+                                                            <td class="text-danger fw-bold">${{ i.amount_spent }}</td>
+                                                            <td class="text-success fw-bold"> ${{ salary.remaining_salary|floatformat:2 }}
+                                                            <td>${{ i.salary }}</td>
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal-{{ i.pk }}">
+                                                                    ✏ Edit
+                                                                </button>
+                                                                <form method="post" action="{% url 'expense_delete' i.pk %}" style="display:inline;">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                    {% empty %}
+                                                        <tr>
+                                                            <td colspan="7" class="text-center text-muted">No expenses found.</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 
                                 <!-- Bootstrap CSS & JS -->
                                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">

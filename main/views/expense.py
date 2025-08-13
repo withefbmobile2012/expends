@@ -5,50 +5,42 @@ from django.views import View
 from main.forms import ExpenseForm
 from django.shortcuts import get_object_or_404
 from main.models.expense import UserSalary
-
+from main.views.category import categories_detail
+from main.forms.expence import ExpenseForm, UserSalaryForm
 
 
 
 class ExpenseView(View):
     def get(self, request):
         expenses = Expense.objects.all()
-        salary_obj = UserSalary.objects.first()
+        salaries = UserSalary.objects.all()
 
         return render(request, 'index.html', {
             'form': ExpenseForm(),
             'expenses': expenses,
-            'salary_set': bool(salary_obj),
-            'total_salary': salary_obj.total_salary if salary_obj else 0,
+            'salaries': salaries,  
+            'salary_set': salaries.exists(),
+            'categories': categories_detail(request, Expense, 'expense_list'),
         })
 
     def post(self, request):
         form = ExpenseForm(request.POST)
-        salary_obj = UserSalary.objects.first()
-
-        if not salary_obj:
-            salary_input = request.POST.get('salary')
-            if not salary_input:
-                return render(request, 'index.html', {
-                    'form': form,
-                    'expenses': Expense.objects.all(),
-                    'salary_error': 'Please enter your salary.'
-                })
-            salary_obj = UserSalary.objects.create(total_salary=salary_input)
-
         if form.is_valid():
             expense = form.save(commit=False)
-            expense.salary = salary_obj.total_salary
-            salary_obj.total_salary -= expense.amount_spent
-            salary_obj.save()
+            selected_salary = expense.salary  
+            selected_salary.total_salary -= expense.amount_spent
+            selected_salary.save()
             expense.save()
             return redirect('expense_list')
 
         return render(request, 'index.html', {
             'form': form,
             'expenses': Expense.objects.all(),
+            'salaries': UserSalary.objects.all(),
             'form_errors': form.errors
         })
-
+    
+    
 
 class ExpenseEditView(View):
     def get(self, request, pk):
@@ -74,3 +66,34 @@ class ExpenseDeleteView(View):
         expense = get_object_or_404(Expense, pk=pk)
         expense.delete()
         return redirect('/expense')
+    
+
+def get(self, request):
+    expenses = Expense.objects.all()
+    salaries = UserSalary.objects.all()
+
+    selected_salary = salaries.first() 
+
+    return render(request, 'index.html', {
+        'form': ExpenseForm(),
+        'expenses': expenses,
+        'salaries': salaries,
+        'salary_set': salaries.exists(),
+        'selected_salary': selected_salary,
+        'categories': categories_detail(request, Expense, 'expense_list'),
+    })
+
+
+class UserSalaryView(View):
+    def get(self, request):
+        salaries = UserSalary.objects.all()
+        form = UserSalaryForm()
+        return render(request, 'expense_salary.html', {'form': form, 'salaries': salaries})
+
+    def post(self, request):
+        form = UserSalaryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('salaries')
+        salaries = UserSalary.objects.all()
+        return render(request, 'expense_salary.html', {'form': form, 'salaries': salaries})
