@@ -1,27 +1,25 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from main import forms
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
+
 
 def login_user(request):
     if request.POST:
-        form = AuthenticationForm(data=request.POST)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            print(username, password)
-
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
+
             if user is not None:
-                print(user)
                 login(request, user)
-                messages.success(request, 'Logged in successfully')
-                return redirect('/home')
-            else:
-                messages.error(request, 'Invalid credentials')
-        messages.error(request, f'{form.errors}')
-        print(form.error_messages)
+                messages.success(request, "Xush kelibsiz")
+                return redirect("/home")
+        else:
+            messages.error(request, f"Username yoki Password xato !")
+
     form = AuthenticationForm()
     return render(request, "auth/register.html", {"form": form})
 
@@ -37,12 +35,12 @@ def logout_user(request):
 
 def register_user(request):
     if request.POST:
-        form = forms.RegisterUserForm(request.POST)
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, 'Account created successfully')
             return redirect('/')
-    form = forms.RegisterUserForm()
+    form = UserCreationForm()
     return render(request, "auth/register.html", {"form": form})
 
 
