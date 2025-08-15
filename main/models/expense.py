@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class UserSalary(models.Model):
     total_salary = models.DecimalField(
-        max_digits=10,
+        max_digits=1000000000,
         decimal_places=2,
         null=True,
         blank=True
@@ -22,7 +22,7 @@ class UserSalary(models.Model):
 
 class Expense(models.Model):
     salary = models.ForeignKey(UserSalary, on_delete=models.CASCADE, related_name='expenses')
-    amount_spent = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    amount_spent = models.DecimalField(max_digits=10000000, decimal_places=2, null=True, blank=True)
     description = models.CharField(max_length=200, blank=True, null=True)
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, related_name='expenses', blank=True)
     date = models.DateField(default=timezone.now)
@@ -33,3 +33,14 @@ class Expense(models.Model):
     @property
     def remaining_salary_after_this(self):
         return self.salary.total_salary - self.amount_spent
+
+
+class Salary(models.Model):
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+    remaining_salary = models.DecimalField(max_digits=15, decimal_places=2)
+
+    def save(self, *args, **kwargs):
+        if self.remaining_salary <= 0:
+            self.delete()
+            return
+        super().save(*args, **kwargs)

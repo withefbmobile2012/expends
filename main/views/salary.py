@@ -3,18 +3,20 @@ from django.shortcuts import render, redirect
 from main.models.expense import UserSalary
 from main.forms import UserSalaryForm
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
+from main.models.expense import Expense
+from main.forms import ExpenseForm
 
 
 
-@method_decorator(login_required, name='dispatch')
 class UserSalaryView(View):
     def get(self, request):
         salaries = UserSalary.objects.all()
+        expenses = Expense.objects.all()  # Add expense history
+        form = UserSalaryForm()
         return render(request, 'expense_salary.html', {
+            'form': form,
             'salaries': salaries,
-            'form': UserSalaryForm()
+            'expenses': expenses  # Send to template
         })
 
     def post(self, request):
@@ -23,23 +25,28 @@ class UserSalaryView(View):
             form.save()
             return redirect('salary_list')
         salaries = UserSalary.objects.all()
+        expenses = Expense.objects.all()
         return render(request, 'expense_salary.html', {
+            'form': form,
             'salaries': salaries,
-            'form': form
+            'expenses': expenses
         })
 
 
-@method_decorator(login_required, name='dispatch')
 class UserSalaryDeleteView(View):
     def post(self, request, pk):
+        if not request.user.is_authenticated:
+            return redirect('/')
         salary = get_object_or_404(UserSalary, pk=pk)
         salary.delete()
         return redirect('salary_list')
 
 
-@method_decorator(login_required, name='dispatch')
+
 class UserSalaryEditView(View):
     def get(self, request, pk):
+        if not request.user.is_authenticated:
+            return redirect('/')
         salary = get_object_or_404(UserSalary, pk=pk)
         form = UserSalaryForm(instance=salary)
         return render(request, 'expense_salary.html', {
@@ -48,9 +55,25 @@ class UserSalaryEditView(View):
             'edit_id': pk
         })
 
+
     def post(self, request, pk):
+        if not request.user.is_authenticated:
+            return redirect('/')
         salary = get_object_or_404(UserSalary, pk=pk)
         form = UserSalaryForm(request.POST, instance=salary)
         if form.is_valid():
             form.save()
         return redirect('salary_list')
+    
+
+def add_expense(request):
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            expense = form.save()
+        
+            salary = expense.salary
+            if salary.remaining_salary <= 0:
+                salary.delete()
+                
+            return redirect('expense_list')

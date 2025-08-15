@@ -23,5 +23,5 @@ urlpatterns = [
     path('', include('main.urls.users')),
     path('category/', include('main.urls.category')),
     path('expense/', include('main.urls.expense')),
-    path('salaries/', include('main.urls.expense')),
+    path('salaries/', include('main.urls.salary')),
 ]
