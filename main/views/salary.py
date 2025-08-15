@@ -64,16 +64,3 @@ class UserSalaryEditView(View):
         if form.is_valid():
             form.save()
         return redirect('salary_list')
-    
-
-def add_expense(request):
-    if request.method == 'POST':
-        form = ExpenseForm(request.POST)
-        if form.is_valid():
-            expense = form.save()
-        
-            salary = expense.salary
-            if salary.remaining_salary <= 0:
-                salary.delete()
-                
-            return redirect('expense_list')
