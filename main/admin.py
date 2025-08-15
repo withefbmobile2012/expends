@@ -11,7 +11,7 @@ class BaseAdmin(admin.ModelAdmin):
 
 @admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "added_at", "order_num")
+    list_display = ("id", "name", "added_at")
     list_display_links = ("id", "name")
 
 
