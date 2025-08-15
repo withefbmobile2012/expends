@@ -4,14 +4,19 @@ from django.utils import timezone
 
 
 class UserSalary(models.Model):
-    total_salary = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    total_salary = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True
+    )
 
     def remaining_salary(self):
         spent = sum(exp.amount_spent or 0 for exp in self.expenses.all())
-        return self.total_salary - spent
+        return (self.total_salary or 0) - spent
 
     def __str__(self):
-        return f"Total Salary: {self.total_salary}"
+        return f"Total Salary: {self.total_salary or 'Not set'}"
     
 
 
