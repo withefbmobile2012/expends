@@ -44,6 +44,3 @@ class Salary(models.Model):
             self.delete()
             return
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"Salary: {self.amount} (Remaining: {self.remaining_salary})"
