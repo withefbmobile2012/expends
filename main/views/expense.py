@@ -1,33 +1,33 @@
-from django.shortcuts import render, redirect
-from main.models.expense import Expense
-from main.views import *
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from main.forms import ExpenseForm
-from django.shortcuts import get_object_or_404
-from main.models.expense import UserSalary
-from main.views.category import categories_detail
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from main.models.expense import Expense, UserSalary
 from main.forms.expence import ExpenseForm, UserSalaryForm
-
+from main.views.category import categories_detail
 
 
 class ExpenseView(View):
     def get(self, request):
+        print("User authenticated:", request.user.is_authenticated)  # Debugging line
+        if not request.user.is_authenticated:
+            return redirect('/')
         expenses = Expense.objects.all()
         salaries = UserSalary.objects.all()
-
-        return render(request, 'index.html', {
+        return render(request, 'expense.html', {
             'form': ExpenseForm(),
             'expenses': expenses,
-            'salaries': salaries,  
+            'salaries': salaries,
             'salary_set': salaries.exists(),
-            'categories': categories_detail(request, Expense, 'expense_list'),
+            # 'categories': categories_detail(request, Expense, 'expense_list'),
         })
 
     def post(self, request):
+        print("User authenticated:", request.user.is_authenticated)  
         form = ExpenseForm(request.POST)
         if form.is_valid():
             expense = form.save(commit=False)
-            selected_salary = expense.salary  
+            selected_salary = expense.salary
             selected_salary.total_salary -= expense.amount_spent
             selected_salary.save()
             expense.save()
@@ -39,15 +39,15 @@ class ExpenseView(View):
             'salaries': UserSalary.objects.all(),
             'form_errors': form.errors
         })
-    
-    
 
+
+@method_decorator(login_required, name='dispatch')
 class ExpenseEditView(View):
     def get(self, request, pk):
         expenses = Expense.objects.all()
         expense = get_object_or_404(Expense, pk=pk)
         return render(request, 'index.html', {
-            'form': ExpenseForm() if pk is None else None,
+            'form': ExpenseForm(),
             'expenses': expenses,
             'edit_form': ExpenseForm(instance=expense),
             'edit_id': pk
@@ -58,32 +58,18 @@ class ExpenseEditView(View):
         form = ExpenseForm(request.POST, instance=expense)
         if form.is_valid():
             form.save()
-        return redirect('/expense')
+        return redirect('expense_list')
 
 
+@method_decorator(login_required, name='dispatch')
 class ExpenseDeleteView(View):
     def post(self, request, pk):
         expense = get_object_or_404(Expense, pk=pk)
         expense.delete()
-        return redirect('/expense')
-    
-
-def get(self, request):
-    expenses = Expense.objects.all()
-    salaries = UserSalary.objects.all()
-
-    selected_salary = salaries.first() 
-
-    return render(request, 'index.html', {
-        'form': ExpenseForm(),
-        'expenses': expenses,
-        'salaries': salaries,
-        'salary_set': salaries.exists(),
-        'selected_salary': selected_salary,
-        'categories': categories_detail(request, Expense, 'expense_list'),
-    })
+        return redirect('expense_list')
 
 
+@method_decorator(login_required, name='dispatch')
 class UserSalaryView(View):
     def get(self, request):
         salaries = UserSalary.objects.all()

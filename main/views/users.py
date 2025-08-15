@@ -25,10 +25,7 @@ def login_user(request):
 
 
 def logout_user(request):
-    if request.user.is_authenticated:
-        messages.success(request, 'Logged out successfully')
-    else:
-        messages.error(request, 'You are not logged in')
+    logout(request)
     return redirect('/')
 
 
@@ -56,3 +53,7 @@ def profile(request):
         "expenses": expenses,
         "categories": categories
     })
+
+def logout_view(request):
+    logout(request)  
+    return redirect('/')
