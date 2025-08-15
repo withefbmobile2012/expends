@@ -1,35 +1,6 @@
 {% extends 'base.html' %}
-{% load static %}
-
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>SB Admin 2 - Expense</title>
-
-    <!-- Custom fonts for this template -->
-    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
-
-</head>
-
-<body id="page-top">
+{% load static %}
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -439,12 +410,6 @@
                                         <div class="card shadow-sm border-0">
                                             <div class="card-body">
                                                 
-                                                <!-- Salary Selection
-                                                <div class="form-group mb-3">
-                                                    <label for="id_salary" class="fw-bold">Select Salary</label>
-                                                    {{ form.salary }}
-                                                </div> -->
-                                    
                                                 <div class="mb-3">
                                                     {{ form.as_p }}
                                                 </div>
@@ -492,7 +457,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {% for i in expense %}
+                                                    {% for i in expenses %}
                                                     <tr>
                                                         <td>{{ forloop.counter }}</td>
                                                         <td>{{ i.description|default:"---" }}</td>
@@ -501,19 +466,21 @@
                                                         <td class="text-success fw-bold">${{ i.salary.remaining_salary|floatformat:2 }}</td>
                                                         <td>${{ i.salary }}</td>
                                                         <td class="text-center">
-                                                            <!-- Edit Button -->
-                                                            <button type="button" class="btn btn-sm btn-warning" data-toggle="modal" data-target="#editModal-{{ i.pk }}">
-                                                                ✏ Edit
-                                                            </button>
-                                                    
-                                                            <!-- Delete Form -->
-                                                            <form method="post" action="{% url 'expense_delete' i.pk %}" style="display:inline;">
-                                                                {% csrf_token %}
-                                                                <button type="submit" class="btn btn-sm btn-danger">🗑 Delete</button>
-                                                            </form>
+                                                            <div class="d-flex justify-content-center gap-1">
+                                                                <!-- Edit Button -->
+                                                                <button type="button" class="btn btn-sm btn-warning min-width-btn" 
+                                                                    data-toggle="modal" data-target="#editModal-{{ i.pk }}">
+                                                                    ✏ Edit
+                                                                </button>
+                                                        
+                                                                <!-- Delete Form -->
+                                                                <form method="post" action="{% url 'expense_delete' i.pk %}">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-sm btn-danger min-width-btn">🗑 Delete</button>
+                                                                </form>
+                                                            </div>
                                                         </td>
                                                     </tr>
-                                                    
                                                     <!-- Edit Modal -->
                                                     <div class="modal fade" id="editModal-{{ i.pk }}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel-{{ i.pk }}" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
@@ -538,6 +505,12 @@
                                                         </div>
                                                     </div>
                                                     {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    
+                                             
                                 
                                 <!-- Bootstrap CSS & JS -->
                                 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -550,10 +523,8 @@
 
                 </div>
                 <!-- /.container-fluid -->
-
+                
             </div>
-            <!-- End of Main Content -->
-            <!-- End of Footer -->
 
         </div>
         <!-- End of Content Wrapper -->
@@ -565,7 +536,7 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
+        
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -601,10 +572,8 @@
     <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
 
     <!-- Page level custom scripts -->
+    <!-- Page level custom scripts -->
     <script src="{% static 'js/demo/datatables-demo.js' %}"></script>
 
-</body>
-
-</html>
 
 {% endblock %}
