@@ -1,19 +1,14 @@
 {% extends "base.html" %}
-{% block content %}
 {% load static %}
-<html>
-  <body>
+{% block content %}
     <div class="container">
         <div class="section">
             <h2>Category Create</h2>
-            <div class="form-group"><form class="form-floating">
-            <input type="text" class="form-control" id="floatingInputValue" placeholder="name" value="">
-            <label for="floatingInputValue">Enter name for new Category</label>
+            <form method="post">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">Submit</button>
             </form>
-                <input type="text">
-            </div>
-            <button><a href="/category">Submit</a></button>
+        </div>
     </div>
-   </body>
-</html>
 {% endblock %}
