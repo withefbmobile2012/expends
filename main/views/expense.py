@@ -13,10 +13,15 @@ class ExpenseView(View):
         if not request.user.is_authenticated:
             return redirect('/')
         expenses = Expense.objects.all()
+        # Add cashback_amount for each expense
+        expenses_with_cashback = []
+        for e in expenses:
+            e.cashback_amount = e.cashback_amount()
+            expenses_with_cashback.append(e)
         salaries = UserSalary.objects.all()
         return render(request, 'expense.html', {
             'form': ExpenseForm(),
-            'expenses': expenses,
+            'expenses': expenses_with_cashback,
             'salaries': salaries,
             'salary_set': salaries.exists(),
             # 'categories': categories_detail(request, Expense, 'expense_list'),
@@ -28,8 +33,9 @@ class ExpenseView(View):
         if form.is_valid():
             expense = form.save(commit=False)
             selected_salary = expense.salary
-            selected_salary.total_salary -= expense.amount_spent
-            selected_salary.save()
+            # Only update remaining_salary, not total_salary
+            # selected_salary.total_salary -= expense.amount_spent  # REMOVE THIS LINE
+            # Expense model's save() will handle remaining_salary update
             expense.save()
             return redirect('expense_list')
 
