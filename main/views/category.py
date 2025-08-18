@@ -21,25 +21,25 @@ def categories_list(request):
         context = {
             "category_list": category_list
         }
+        return render(request, "categories.html", context)
     else:
         return redirect("/")
-    return render(request, "categories.html", context)
 
 
 def category_create(request):
     if request.user.is_authenticated:
         if request.POST:
-            form = forms.CategoryForm
+            form = forms.CategoryForm(request.POST)
             if form.is_valid():
                 form.save()
-                return redirect("/category/list")
+                return redirect("/category")
         form = forms.CategoryForm()
         context = {
             "form": form
         }
+        return render(request, "category_create.html", context)
     else:
         return redirect("/")
-    return render(request, "category_create.html", context)
 
 
 def category_update(request, pk):
@@ -49,7 +49,7 @@ def category_update(request, pk):
             form = forms.CategoryForm(request.POST, instance=obj)
             if form.is_valid():
                 form.save()
-                return redirect("/category/list")
+                return redirect("/category/")
         form = forms.CategoryForm(instance=obj)
         context = {
             "form": form
@@ -63,6 +63,6 @@ def category_delete(request, pk):
     if request.user.is_authenticated:
         obj = get_object_or_404(model.Category, pk=pk)
         obj.delete()
-        return redirect("/category/list")
+        return redirect("/category/")
     else:
         return redirect("/")
